@@ -110,15 +110,32 @@ CakeLog::config('error', array(
 	'file' => 'error',
 ));
 
-CakeLog::config('CURRENT_ENV', 'sandbox'); //production
+CakePlugin::load('Migrations');
+
+Configure::write('CURRENT_ENV', 'sandbox'); //production
 
 // netsuite settings
-CakeLog::config("NS_SANDBOX_ACCOUNT", "3704883_SB2");
-CakeLog::config("NS_SANDBOX_EMAIL", "willy@bilna.com");
-CakeLog::config("NS_SANDBOX_SIGNATURE", "Netsuite123");
-CakeLog::config("NS_SANDBOX_AUTHROLE", "3");
+Configure::write("NS_SANDBOX_ACCOUNT", "3704883_SB2");
+Configure::write("NS_SANDBOX_EMAIL", "willy@bilna.com");
+Configure::write("NS_SANDBOX_SIGNATURE", "Netsuite123");
+Configure::write("NS_SANDBOX_AUTHROLE", "3");
 
-CakeLog::config("NS_PRODUCTION_ACCOUNT", "3704883");
-CakeLog::config("NS_PRODUCTION_EMAIL", "hms@orami.co.id");
-CakeLog::config("NS_PRODUCTION_SIGNATURE", "HermesNetsuite123");
-CakeLog::config("NS_PRODUCTION_AUTHROLE", "3");
+Configure::write("NS_PRODUCTION_ACCOUNT", "3704883");
+Configure::write("NS_PRODUCTION_EMAIL", "hms@orami.co.id");
+Configure::write("NS_PRODUCTION_SIGNATURE", "HermesNetsuite123");
+Configure::write("NS_PRODUCTION_AUTHROLE", "3");
+
+Configure::write("NS_SANDBOX_CONSUMER_KEY", "564d6f0bd864c3870657dead5528d0f9cbaa8d3f91d77c6c576a7842ebce0956");
+Configure::write("NS_SANDBOX_CONSUMER_SECREET", "c788d9dc9b3d2f0ccac778e92b58987325d761b951a51272e4573d7f2b9e7043");
+Configure::write("NS_SANDBOX_TOKEN_ID", "dcdb79ce84d23f233da80410b03bc4f39aa3b6a863b64b85b790753020320022");
+Configure::write("NS_SANDBOX_TOKEN_SECRET", "5c694aa84a19c33a4758e46f1869b9ea6e7dffdaac5bc9b8f7d6c62f252a74e1");
+
+Configure::write("NS_PRODUCTION_CONSUMER_KEY", "");
+Configure::write("NS_PRODUCTION_CONSUMER_SECREET", "");
+Configure::write("NS_PRODUCTION_TOKEN_ID", "");
+Configure::write("NS_PRODUCTION_TOKEN_SECRET", "");
+
+Configure::write("NS_SANBOX_SCRIPT", [
+    'testing' => 656, 
+    'attendance' => 684
+]);
