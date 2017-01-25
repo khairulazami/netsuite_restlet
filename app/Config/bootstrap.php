@@ -137,5 +137,7 @@ Configure::write("NS_PRODUCTION_TOKEN_SECRET", "");
 
 Configure::write("NS_SANBOX_SCRIPT", [
     'testing' => 656, 
-    'attendance' => 684
+    'attendance' => 684,
+    'get_trx_from_line_item' => 689,
+    'get_trx_from_line_item_without_internalid' => 690
 ]);

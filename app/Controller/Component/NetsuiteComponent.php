@@ -2,7 +2,7 @@
 
 class NetsuiteComponent extends Component
 {
-    function restletv1($scriptId, $vars)
+    function restletv1($scriptId, $vars, $action = 'get')
     {
         if (Configure::read('CURRENT_ENV') == 'sandbox') {
             $nsRestHost = 'https://rest.sandbox.netsuite.com';
@@ -11,10 +11,33 @@ class NetsuiteComponent extends Component
         }
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, ($nsRestHost . "/app/site/hosting/restlet.nl?script=$scriptId&deploy=1"));
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($vars));  //Post Fields
+        $params = NULL;
+        $method = NULL;
         
+        switch ($action) {
+            case 'create':
+                $method = 'POST';
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($vars));  //Post Fields
+                break;
+            case 'delete':
+                $method = 'DELETE';
+                break;
+            case 'update':
+                $method = 'PUT';
+                break;
+            default:
+                $method = 'GET';
+                if (!empty($vars)) {
+                    $params = '&'.http_build_query($vars);
+                }
+        }
+
+        curl_setopt($ch, CURLOPT_URL, ($nsRestHost . "/app/site/hosting/restlet.nl?script=$scriptId&deploy=1".$params));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+
         $headers = [];
         if (Configure::read('CURRENT_ENV') == 'sandbox') {
             $headers[] = 'Authorization: NLAuth nlauth_account='.Configure::read('NS_SANDBOX_ACCOUNT').',nlauth_email='.Configure::read('NS_SANDBOX_EMAIL').',nlauth_signature='.Configure::read('NS_SANDBOX_SIGNATURE').',nlauth_role='.Configure::read('NS_SANDBOX_AUTHROLE');
@@ -38,6 +61,7 @@ class NetsuiteComponent extends Component
                 $header = substr($server_output, 0, $header_size);
                 $body = substr($server_output, $header_size);
                 $response['code'] = $httpcode;
+                $response['method'] = $method;
                 $response['header'] = $header;
                 $response['body'] = $body;
                 if ($httpcode != 400) {
@@ -47,6 +71,7 @@ class NetsuiteComponent extends Component
                 $code = $ex->getCode();
                 $errmessage = $ex->getMessage();
                 $response['code'] = $code;
+                $response['method'] = $method;
                 $response['header'] = '-';
                 $response['body'] = $errmessage;
             }
